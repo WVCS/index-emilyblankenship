@@ -1,6 +1,119 @@
 <html>
-  
+  <div id="entireDiv">
+<form autocomplete="off" action="/action_page.php">
+  <div class="autocomplete">
+    <input id="myInput" type="text" name="myCountry" placeholder="CLICK HERE!"><img src="https://www.creativefabrica.com/wp-content/uploads/2019/02/Ice-Cream-Sundae-Illustration-by-Mine-Eyes-Design-580x424.png"width=10%>
+   <img src="https://lh3.googleusercontent.com/proxy/SCF8Ww5WaGg8v0zjYPkaFgHyJj0FqWpoXf5bAspe2SUC7nrn4sy95YPEHgeh7WEUP5H-01BbE07m8DguvzQgjuzlzq9H078MQ8mDsmCaHnI7r6jFyaRgwcK3AJmNEeMrSkxdbH5Swoe_Zhr5CMxB2Xyyfht1NQ"width=13%>
+    <img src="https://cdn1.vectorstock.com/i/1000x1000/13/55/cute-kawaii-cake-chocolate-candles-happy-vector-11211355.jpg"width=7%>
+    <img src="https://www.clipartkey.com/mpngs/m/138-1380242_kawaii-cupcake-cute-kawaii-cute-cupcake-clipart.png"width=11%>
+    <img src="https://www.clipartkey.com/mpngs/m/78-786728_carton-cute-chocolate-milk.png"width=7%>
+  </div>
+</form>
+<div>
   
   
   
 </html>
+    
+    .autocomplete {
+  background-color: #dcdcf5;
+  width: 90%;
+  length: 90%;
+}
+
+
+#myInput {
+  width: 50%;
+  background-color: #dcf5f5;
+}
+
+#entireDiv {
+  position: center;
+}
+
+    
+    function autocomplete(inp, arr) {
+
+  var currentFocus;
+
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+
+      this.parentNode.appendChild(a);
+
+      for (i = 0; i < arr.length; i++) {
+
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+
+          b = document.createElement("DIV");
+
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+
+          b.addEventListener("click", function(e) {
+
+              inp.value = this.getElementsByTagName("input")[0].value;
+
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        currentFocus++;
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        currentFocus--;
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        e.preventDefault();
+        if (currentFocus > -1) {
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    if (!x) return false;
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+var autoAnswers = ["cheesecake", "lava cake", "apple pie", "vanilla cake", "chocolate cake", "strawberry sherbert cake","bluebbery cake", "ice cream", "donuts", "cupcake", "chocolate milk", "brownies",];
+
+autocomplete(document.getElementById("myInput"), autoAnswers);
